@@ -20,8 +20,11 @@
             <el-input type="textarea" v-model="infoForm.simple_desc" :rows="3"></el-input>
             <div class="form-tip"></div>
           </el-form-item>
-          <el-form-item label="展示价格">
+          <el-form-item label="展示单价">
             <el-input-number v-model="infoForm.price"  :min="0" :max="10000000000" label="商品价格"></el-input-number>元
+          </el-form-item>
+           <el-form-item label="展示团价" v-show="false">
+            <el-input-number v-model="infoForm.t_price"  :min="0" :max="10000000000" label="商品价格"></el-input-number>元
           </el-form-item>
           <el-form-item label="是否团购">
             <el-switch v-model="is_pintuan" on-color="#13ce66" on-text="拼团" off-text="关闭">
@@ -128,7 +131,7 @@
               <el-table-column prop="num" label="库存">
                 <template  scope="scope"> <el-input v-model="scope.row.num" placeholder="请输入库存"></el-input> </template>
               </el-table-column>
-              <el-table-column  prop="t_price" label="团购价">
+              <el-table-column v-show="false" prop="t_price" label="团购价">
                 <template  scope="scope"> <el-input v-show="is_pintuan" v-model="scope.row.t_price" placeholder="请输入团购价"></el-input> </template>
               </el-table-column>
               <el-table-column prop="pic" label="图片">
@@ -154,16 +157,17 @@
           </el-form-item>
           <el-form-item label="轮播图片" prop="pic_url">
             <el-upload action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove" :on-success="handleUploadImageSuccess1"><i class="el-icon-plus"></i></el-upload>
+                    :on-remove="handleRemove" :on-success="handleUploadImageSuccess1"  :before-upload="beforeAvatarUpload"><i class="el-icon-plus"></i></el-upload>
                   <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt="">
                   </el-dialog>
           </el-form-item>
           <el-form-item label='列表展示图' prop="list_pic_url">
             <el-upload action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove" :on-success="handleUploadImageSuccess">
-                    <img v-if="infoForm.list_pic_url" :src="infoForm.list_pic_url" class="image-show">
-                    <i v-else class="el-icon-plus"></i></el-upload>
+                    :on-remove="handleRemove" :on-success="handleUploadImageSuccess"  :before-upload="beforeAvatarUpload">
+                    <i class="el-icon-plus"></i>
+                    <div class="el-upload__tip" slot="tip">图片上传不超过2M且最佳分辨率为686x318</div>
+                    </el-upload>
                   
                   <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt="">
@@ -240,9 +244,11 @@
         infoRules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
+            { min: 1, max: 15, message: '长度在 2 到 15 个汉字', trigger: 'blur' }
           ],
           simple_desc: [
             { required: true, message: '请输入简介', trigger: 'blur' },
+            { min: 1, max: 15, message: '长度在 2 到 15 个汉字', trigger: 'blur' }
           ],
           list_pic_url: [
             { required: true, message: '请选择商品图片', trigger: 'blur' },
@@ -326,6 +332,18 @@
           }
         }
         //tablecol 添加
+      },
+      beforeAvatarUpload(file){
+          // const isJPG = file.type === 'image/jpeg';
+          const isLt2M = file.size / 1024 / 1024 < 2;
+          console.log(file);
+          // if (!isJPG) {
+          //   this.$message.error('上传头像图片只能是 JPG 格式!');
+          // }
+          if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+          }
+          return isLt2M;
       },
       setnum(e){
         if( e =='price'){

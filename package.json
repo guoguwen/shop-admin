@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "egrid": "^1.1.0",
     "element-ui": "^1.4.1",
     "moment": "^2.21.0",
     "quill-image-extend-module": "^1.1.2",

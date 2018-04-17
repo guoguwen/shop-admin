@@ -5,6 +5,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import VueQuillEditor from 'vue-quill-editor'
 //import QuillRedefine from 'quill-image-extend-module'
+import Egrid from 'egrid'
 
 import App from './App'
 import router from './router'
@@ -13,6 +14,7 @@ import store from './store'
 Vue.use(VueAxios, Axios);
 Vue.use(ElementUI);
 Vue.use(VueQuillEditor);
+Vue.use(Egrid);
 //Vue.use(QuillRedefine);
 
 router.beforeEach((to, from, next) => {

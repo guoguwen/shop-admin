@@ -486,6 +486,13 @@
             list_pic_url:this.infoForm.list_pic_url,
             pic_list:this.infoForm.pic_url,
         }
+        if(data.pic_list.length === 0){
+          this.$message({
+            type: 'error',
+            message: '轮播图片不能为空，请上传图片后保存'
+          })
+          return 
+        }
         console.log(data);
         this.axios.post('goods/addGoods',data).then(res => {
           if(res.data.errno === 0 ){
