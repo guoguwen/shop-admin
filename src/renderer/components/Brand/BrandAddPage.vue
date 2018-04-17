@@ -22,7 +22,7 @@
                     </el-form-item>
                     <el-form-item label="品牌图片" prop="list_pic_url">
                         <el-upload class="image-uploader" name="brand_pic"
-                                   action="https://dh.sty.sztcmdiet.com/admin/upload/brandPic" :show-file-list="false"
+                                   action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" :show-file-list="false"
                                    :on-success="handleUploadImageSuccess" :headers="uploaderHeader">
                             <img v-if="infoForm.list_pic_url" :src="infoForm.list_pic_url" class="image-show">
                             <i v-else class="el-icon-plus image-uploader-icon"></i>
@@ -34,7 +34,7 @@
                     </el-form-item>
                     <el-form-item label="推荐展示图片" v-if="infoForm.is_new">
                         <el-upload class="image-uploader new-image-uploader" name="brand_new_pic"
-                                   action="https://dh.sty.sztcmdiet.com/admin/upload/brandNewPic" :show-file-list="false"
+                                   action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" :show-file-list="false"
                                    :on-success="handleUploadImageSuccess" :headers="uploaderHeader">
                             <img v-if="infoForm.new_pic_url" :src="infoForm.new_pic_url" class="image-show">
                             <i v-else class="el-icon-plus image-uploader-icon"></i>
@@ -120,6 +120,8 @@
             },
             handleUploadImageSuccess(res, file) {
                 if (res.errno === 0) {
+                    this.infoForm.list_pic_url = res.data.path;
+                    //下面代码基本没什么卵用
                     switch (res.data.name) {
                         //品牌图片
                         case 'brand_pic':

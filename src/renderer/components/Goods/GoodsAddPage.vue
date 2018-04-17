@@ -484,20 +484,20 @@
           pic_list:this.infoForm.pic_url,
         }
         console.log(data);
-        this.axios.post('goods/addGoods',data).then(res => {
-          if(res.data.errno === 0 ){
-            this.$message({
-                  type: 'success',
-                  message: '上传成功'
-            })
-            this.$router.go(-1);
-          }else{
-            this.$message({
-                  type: 'error',
-                  message: '上传失败'
-            })
-          }
-        })
+        // this.axios.post('goods/addGoods',data).then(res => {
+        //   if(res.data.errno === 0 ){
+        //     this.$message({
+        //           type: 'success',
+        //           message: '上传成功'
+        //     })
+        //     this.$router.go(-1);
+        //   }else{
+        //     this.$message({
+        //           type: 'error',
+        //           message: '上传失败'
+        //     })
+        //   }
+        // })
       },
       handleUploadImageSuccess1(res, file) {
         if (res.errno === 0) {

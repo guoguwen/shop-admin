@@ -31,7 +31,7 @@
             <el-input-number  v-model="infoForm.num"  :min="0" :max="100000" label="团购数量"></el-input-number>
           </el-form-item>
           <!-- 添加规格值 1-->
-          <el-form-item label="规格名">
+          <!-- <el-form-item label="规格名">
             <el-select v-model="specification[0]" placeholder="请选择规格">
               <el-option v-for="item in specifications" :key="item.value" :label="item.label" :value="item.label"></el-option>
             </el-select>
@@ -57,7 +57,7 @@
                 </div>    
               </el-col>
              </el-row>    
-          </el-form-item>
+          </el-form-item> -->
           <!-- 2 -->
           <el-form-item label="">
             <el-select v-show="spec.se[0]" v-model="specification[1]" placeholder="请选择规格">
@@ -115,8 +115,8 @@
             </el-row>
           </el-form-item>
           <!-- 添加规格 -->
-          <el-button plain class="add-item" :disabled="disabled[3]" @click="additem()">添加规格项目</el-button>
-          <el-button plain class="add-item" v-show="disabled[2]" @click="addTable()">完成添加</el-button>
+          <!-- <el-button plain class="add-item" :disabled="disabled[3]" @click="additem()">添加规格项目</el-button>
+          <el-button plain class="add-item" v-show="disabled[2]" @click="addTable()">完成添加</el-button> -->
           <!-- 规格明细 -->
           <el-form-item label="规格明细">
             <el-table :data="tableData" border style="width: 100%">
@@ -140,6 +140,11 @@
                   </el-upload>
                 </template>
               </el-table-column>
+              <el-table-column prop="do" label="操作">
+                <template scope="scope">
+                  <el-button type="warning" size="small" @click="handelDelete(scope.$index, scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
             <el-row :gutter="24" style="margin-top: 20px">
               <label for="">批量设置</label>
@@ -160,11 +165,17 @@
                   </el-dialog>
           </el-form-item>
           <el-form-item label='列表展示图' prop="list_pic_url">
-            <el-upload action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
+            <!-- <el-upload action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
                     :on-remove="handleRemove" :on-success="handleUploadImageSuccess"><i class="el-icon-plus"></i></el-upload>
                   <el-dialog :visible.sync="dialogVisible">
                     <img width="100%"  :src="dialogImageUrl" alt="">
-                  </el-dialog>
+                  </el-dialog> -->
+                  <el-upload class="image-uploader" name="brand_pic"
+                                   action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" :show-file-list="false"
+                                   :on-success="handleUploadImageSuccess" :headers="uploaderHeader">
+                            <img v-if="infoForm.list_pic_url" :src="infoForm.list_pic_url" class="image-show">
+                            <i v-else class="el-icon-plus image-uploader-icon"></i>
+                        </el-upload>
           </el-form-item>
           <el-form-item label="商品详情">
             <quill-editor ref="myTextEditor" v-model="content" :config="editorOption" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
@@ -210,6 +221,7 @@
         sku1:[],
         sku2:[],
         sku_list:[],
+        skuList:[],
         pro_list:[],
         picture:[],
         e_num:'',
@@ -222,7 +234,7 @@
           id: 0,
           name: "",
           num : 1,
-          list_pic_url: '',
+          list_pic_url: [],
           simple_desc: '',
           pic_url: [],
           sort_order: 100,
@@ -258,6 +270,22 @@
       },
       handleChange() {
         console.log(this.selectedOptions);
+      },
+      handelDelete(index,row) {
+        //数组删除操作
+        this.$confirm('确定要删除该规格吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+          let arrLength = this.tableData.length;
+          for(let i in this.tableData){
+            if(i>index){
+              this.tableData[i-1] = this.tableData[i];
+            }
+          }
+          this.tableData.pop(this.tableData[arrLength]);
+        })
       },
       handleUpload(res,file){
          if (res.errno === 0) {
@@ -438,36 +466,15 @@
         this.inputVisible = false;
         this.inputValue = '';
       },
-      //上架产品
+      //修改上架产品
       onSubmitInfo() {
-        // this.$refs['infoForm'].validate((valid) => {
-        //   if (valid) {
-        //     this.axios.post('good/addshelf', this.infoForm).then((response) => {
-        //       if (response.data.errno === 0) {
-        //         this.$message({
-        //           type: 'success',
-        //           message: '保存成功'
-        //         });
-        //         this.$router.go(-1)
-        //       } else {
-        //         this.$message({
-        //           type: 'error',
-        //           message: '保存失败'
-        //         })
-        //       }
-        //     })
-        //   } else {
-        //     return false;
-        //   }
-        // });
-        // if(this.pro_list.length === 0){
-            this.Save();
-        // }
+        this.Save();
         for(let i in this.pro_list){
           this.pro_list[i]['pic']=this.picture[i];
         }
         let data = {
-            sku_list:this.sku_list,
+            id:this.infoForm.id,
+            sku_list:this.skuList,
             pro_list:this.pro_list,
             name:this.infoForm.name,
             is_pintuan:this.is_pintuan ? 1 : 0,
@@ -506,12 +513,42 @@
             this.infoForm.list_pic_url.push(res.data.path);
         }
       },
+      initSKU(){
+        let tempArr=[];
+        let tempSku=[];
+        for(let i in this.sku_list){
+          tempArr.push(this.sku_list[i].specification_id);
+        }
+        let colArr=tempArr.filter(function(e,i,s){
+           return s.indexOf(e) == i; 
+        });
+        //动态表格title && sku_list
+        for(let j in colArr){
+          //表格
+          for(let i in this.specifications){
+            if(this.specifications[i].value == colArr[j]){
+              this.tabcol.push(this.specifications[i].label);
+            }
+          }
+          //sku_list
+          let objArr=[];
+          for(let s in this.sku_list){
+            if(colArr[j] === this.sku_list[s].specification_id){
+              objArr.push(this.sku_list[s].value);
+            }
+          }
+          let obj={
+            [colArr[j]]:objArr
+          };
+          this.skuList.push(obj);  
+        }
+      },
       getInfo() {
         if (this.infoForm.id <= 0) {
           return false
         }
+        //规格遍历
         this.getSorts();
-        this.getbands();
         //加载商品详情
         let that = this
         this.axios.get('goods/info', {
@@ -521,8 +558,9 @@
         }).then((response) => {
           let resInfo = response.data.data;
           this.sku_list = resInfo.sku_list;
+          this.initSKU();
           this.pro_list = resInfo.pro_list;
-          this.tableData = resInfo.pro_list;
+          this.tableData = resInfo.pro_list.length == 0? [] : resInfo.pro_list;
           this.infoForm.name = resInfo.name;
           this.is_pintuan= resInfo.is_pintuan ==1 ? true : false;
           this.goods_number=10000;
@@ -530,8 +568,12 @@
           this.content=resInfo.goods_desc;
           this.infoForm.price=resInfo.retail_price;
           this.infoForm.num=resInfo.pintuan_num;
-          this.infoForm.list_pic_url=resInfo.list_pic_url;
-          this.pic_url=resInfo.primary_pic_url;
+          let list_pic_url=[];
+          for(let i in resInfo.pic_list){
+            list_pic_url.push(resInfo.pic_list[i].img_url);
+          }
+          this.infoForm.list_pic_url=resInfo.primary_pic_url;
+          this.infoForm.pic_url=list_pic_url;
         })
       },
       getspecification(){
@@ -585,10 +627,8 @@
       newEditorSuccess(response, file, fileList){
           if(response.errno===0){                        
               this.addImgRange = this.$refs.myTextEditor.quill.getSelection()
-              this.$refs.myTextEditor.quill.insertEmbed(this.addImgRange != null?this.addImgRange.index:0, 'image',response.data.path)
-              //this.$refs.myTextEditor.quill.insertEmbed(10, 'image',response.data.path)              
+              this.$refs.myTextEditor.quill.insertEmbed(this.addImgRange != null?this.addImgRange.index:0, 'image',response.data.path)             
           }
-        //this.imageLoading =false
       },
     },
     computed:{
@@ -598,16 +638,13 @@
     },
     mounted() {
       this.infoForm.id = this.$route.query.id || 0;
-      console.log(this.infoForm.id);
       this.getInfo();   //若为修改状态加载商品详情
-      this.getbands();  //商品品牌
-      this.getSorts();  //商品分类
-      this.getspecification(); //商品规格 
+      this.getspecification(); //加载规格数组
       var imgHandler = async function(state) {
-          if (state) {
+        if (state) {
           var fileInput =document.querySelector('#uniqueId input') //隐藏的file元素
           fileInput.click() //触发事件
-          }
+        }
       }
       this.$refs.myTextEditor.quill.getModule("toolbar").addHandler("image", imgHandler) 
     }
