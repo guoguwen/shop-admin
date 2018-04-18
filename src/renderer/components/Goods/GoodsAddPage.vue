@@ -62,8 +62,8 @@
              </el-row>    
           </el-form-item>
           <!-- 2 -->
-          <el-form-item label="">
-            <el-select v-show="spec.se[0]" v-model="specification[1]" placeholder="请选择规格">
+          <el-form-item v-show="spec.se[0]">
+            <el-select  v-model="specification[1]" placeholder="请选择规格">
               <el-option v-for="item in specifications" :key="item.value" :label="item.label" :value="item.label"></el-option>
             </el-select>
             <el-row>
@@ -118,13 +118,13 @@
             </el-row>
           </el-form-item>
           <!-- 添加规格 -->
-          <el-button plain class="add-item" :disabled="disabled[3]" @click="additem()">添加规格项目</el-button>
-          <el-button plain class="add-item" v-show="disabled[2]" @click="addTable()">完成添加</el-button>
+          <el-button plain class="add-item" :disabled="disabled[3]" @click.native="additem()">添加规格项目</el-button>
+          <el-button plain class="add-item" v-show="disabled[2]" @click.native="addTable()">完成添加</el-button>
           <!-- 规格明细 -->
           <el-form-item label="规格明细">
             <el-table :data="tableData" border style="width: 100%">
-              <el-table-column prop="sku1" :label="tabcol[0]"></el-table-column>
-              <el-table-column prop="sku2" :label="tabcol[1]"></el-table-column>
+              <el-table-column v-if="tabcol[0]" prop="sku1" :label="tabcol[0]"></el-table-column>
+              <el-table-column v-if="tabcol[1]" prop="sku2" :label="tabcol[1]"></el-table-column>
               <el-table-column prop="price" label="价格">
                 <template  scope="scope"> <el-input v-model="scope.row.price" placeholder="请输入价格"></el-input> </template>
               </el-table-column>
@@ -168,7 +168,6 @@
                     <i class="el-icon-plus"></i>
                     <div class="el-upload__tip" slot="tip">图片上传不超过2M且最佳分辨率为686x318</div>
                     </el-upload>
-                  
                   <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt="">
                   </el-dialog>
@@ -223,7 +222,7 @@
         e_num:'',
         e_price:'',
         spec:{
-          fi:[true,true,false,false,true],se:[false,false,false,false,false],th:[false,true,false,false]
+          fi:[true,true,false,false,false],se:[false,false,false,false,false],th:[false,true,false,false]
           },
         is_pintuan:false,  
         infoForm: {
@@ -310,6 +309,7 @@
           }
           this.tabcol.push(this.specification[1]);
         }
+        console.log(this.tabcol);
         this.disabled[2]=false;
         let temp ={};
         //单规格or多规格
@@ -382,6 +382,7 @@
 //this.tabcol.push(this.specification[1]);
           this.spec.se[2]=true;
         }
+        this.getspecification();
       },
       additem() {
         if(this.spec.se[0]){
@@ -390,7 +391,10 @@
           this.spec.se[0]=true;
           this.spec.se[1]=true;
           this.spec.se[4]=true;
+          console.log('添加规格');
+          console.log(this.spec.se);
           //this.tabcol.push(this.specification[0]);
+          this.getspecification();
         }
         this.disabled[3]=true;
       },
@@ -428,7 +432,7 @@
             //创建下拉框成功
         })
       },
-      //商品品牌
+      //商品品牌(接口改变)
       getbands() {
         this.axios.get('brand').then(res => {
           if(res.data.errno === 0){
@@ -449,7 +453,7 @@
       showInput() {
         this.inputVisible = true;
         this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
+          this.$refs.saveTagInput.focus();
         });
       },
       handleInputConfirm() {
@@ -502,20 +506,20 @@
           pic_list:this.infoForm.pic_url,
         }
         console.log(data);
-        // this.axios.post('goods/addGoods',data).then(res => {
-        //   if(res.data.errno === 0 ){
-        //     this.$message({
-        //           type: 'success',
-        //           message: '上传成功'
-        //     })
-        //     this.$router.go(-1);
-        //   }else{
-        //     this.$message({
-        //           type: 'error',
-        //           message: '上传失败'
-        //     })
-        //   }
-        // })
+        this.axios.post('goods/addGoods',data).then(res => {
+          if(res.data.errno === 0 ){
+            this.$message({
+                  type: 'success',
+                  message: '上传成功'
+            })
+            this.$router.go(-1);
+          }else{
+            this.$message({
+                  type: 'error',
+                  message: '上传失败'
+            })
+          }
+        })
       },
       handleUploadImageSuccess1(res, file) {
         if (res.errno === 0) {

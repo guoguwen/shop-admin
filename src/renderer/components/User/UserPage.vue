@@ -3,7 +3,7 @@
 		<div class="content-nav">
 			<el-breadcrumb class="breadcrumb" separator="/">
 				<el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>商品管理</el-breadcrumb-item>
+				<el-breadcrumb-item>会员管理</el-breadcrumb-item>
 				<el-breadcrumb-item>会员列表</el-breadcrumb-item>
 			</el-breadcrumb>
 			<div class="operation-nav">
