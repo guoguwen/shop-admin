@@ -36,18 +36,6 @@
                     <i class="fa fa-circle"></i>
                     <span>订单列表</span>
                 </el-menu-item>
-                <!--<el-menu-item index="/dashboard/order/detail">-->
-                    <!--<i class="fa fa-circle"></i>-->
-                    <!--<span>发货单</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="/dashboard/order/detail">-->
-                    <!--<i class="fa fa-circle"></i>-->
-                    <!--<span>退/换货</span>-->
-                <!--</el-menu-item>-->
-                <!--<el-menu-item index="/dashboard/order/detail">-->
-                    <!--<i class="fa fa-circle"></i>-->
-                    <!--<span>订单评价</span>-->
-                <!--</el-menu-item>-->
             </el-submenu>
             <el-submenu index="operate">
                 <template slot="title">
@@ -62,7 +50,7 @@
                     <i class="fa fa-circle"></i>
                     <span>二维码</span>
                 </el-menu-item>
-                <el-menu-item index="">
+                <el-menu-item index="/dashboard/operate/coupon">
                     <i class="fa fa-circle"></i>
                     <span>优惠券</span>
                 </el-menu-item>

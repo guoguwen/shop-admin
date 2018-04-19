@@ -82,6 +82,16 @@ export default new Router({
                     component: require('@/components/Topic/TopicPage')
                 },
                 {
+                    path: 'operate/coupon',
+                    name: 'coupon',
+                    component: require('@/components/Topic/CouponPage')
+                },
+                {
+                    path: 'operate/coupon/add',
+                    name: 'coupon_add',
+                    component: require('@/components/Topic/CouponAddPage')
+                },
+                {
                     path: 'operate/qrcode',
                     name: 'qrcode',
                     component: require('@/components/Topic/QRcodePage')

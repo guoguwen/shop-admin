@@ -44,6 +44,9 @@
 					<el-table-column prop="register_time" :formatter="timeFormat" label="注册时间">
 					</el-table-column>
 					<el-table-column prop="takefee" label="消费(次)">
+						<template scope="scope">
+							{{scope.row.takefee ? scope.row.takefee : 0}}
+						</template>	
 					</el-table-column>
 					<!-- <el-table-column prop="last_login_time" :formatter="timeFormat" label="最后登录时间">
 					</el-table-column> -->

@@ -64,6 +64,38 @@
                 </el-pagination>
             </div>
         </div>
+        <div class="content-main">
+            <h4>商品评价</h4><el-button type="primary" icon="plus" class="btn" @click="addJudge">添加评价</el-button>
+            <egrid class="egrid" stripe border :data="judge" :columns="column"></egrid>
+            <el-dialog title="添加评价" v-model="dialogFormVisible">
+                <el-form :model="form" label-position="left" label-width="120px">
+                    <el-form-item label="商品名称">
+                        <el-select v-model="form.g_name" placeholder="请选择活动区域">
+                            <el-option label="区域一" value="shanghai"></el-option>
+                            <el-option label="区域二" value="beijing"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="评价人名称">
+                        <el-input v-model="form.u_name" auto-complete="off" class="content"></el-input><el-radio v-model="form.random" label="true">随机头像</el-radio>
+                    </el-form-item>
+                    <el-form-item label="商品评分">
+                        <el-rate v-model="form.rate" show-text style="display:inline-block"></el-rate>
+                    </el-form-item>
+                    <el-form-item label="评价内容">
+                        <el-input type="textarea" v-model="form.content" clearable="content" :rows="3"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                </div>
+                <el-upload class="upload" action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
+                    :on-remove="handleRemove" :on-success="handleUploadImageSuccess1"  :before-upload="beforeAvatarUpload"><i class="el-icon-plus"></i></el-upload>
+                  <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                  </el-dialog>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -77,11 +109,26 @@
         filterForm: {
           name: ''
         },
+        column:[
+            {label:'评价内容',prop:'content'},
+            {label:'商品名称',prop:'goodName'}
+        ],
+        form:{
+            g_name:'',
+            u_name:'',
+            rate:'',
+            content:''
+        },
+        dialogFormVisible:false,
+        judge:[],
         cando:true,
         tableData: []
       }
     },
     methods: {
+      addJudge(){
+          this.dialogFormVisible =true;
+      },
       handlePageChange(val) {
         this.page = val;
         //保存到localStorage
@@ -139,5 +186,13 @@
 </script>
 
 <style scoped>
-
+    .btn{
+        float: right;
+    }
+    .content{
+        width: 25%;
+    }
+    .upload{
+        margin-left: 15%;
+    }
 </style>
