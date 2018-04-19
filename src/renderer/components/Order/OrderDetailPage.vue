@@ -123,6 +123,7 @@
                 //     return false
                 // }
                 //加载订单详情
+                this.tableData=[];
                 this.axios.get('/order/info?id='+this.infoForm.id).then(res => {
                     this.order_info=res.data.data;
                     let order_status = this.order_info.order_status;
