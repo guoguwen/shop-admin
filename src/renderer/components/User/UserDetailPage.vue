@@ -102,8 +102,8 @@ export default {
         handlePageChange(val) {
             this.page = val;
             //保存到localStorage
-            localStorage.setItem('orderPage', this.page)
-            localStorage.setItem('orderFilterForm', JSON.stringify(this.filterForm));
+            // localStorage.setItem('orderPage', this.page)
+            // localStorage.setItem('orderFilterForm', JSON.stringify(this.filterForm));
             this.init();
         },
         columnsHandler (cols) {
@@ -135,7 +135,12 @@ export default {
             })
         },
         init() {
-            this.axios.get('user/order?user_id='+this.id).then(res => {
+            this.axios.get('user/order',{
+                params: {
+                    user_id: this.id,
+					page: this.page,
+                    }
+			}).then(res => {
                 if(res.data.errno === 0){
                     this.tableData = res.data.data.data;
                     for(let i in this.tableData){

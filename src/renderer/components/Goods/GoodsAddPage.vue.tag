@@ -44,31 +44,100 @@
               </el-col>    
             </el-row>
           </el-form-item>
-          <el-form-item v-show="chooseD" label="规格名称">
-            <el-select v-model="specification[0]" @change="handleChange" placeholder="请选择规格">
+          <el-form-item v-show="chooseD" label="商品规格">
+            <el-select v-model="specification[0]" placeholder="请选择规格">
               <el-option v-for="item in specifications" :key="item.value" :label="item.label" :value="item.label"></el-option>
             </el-select>
-            
-            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-              @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput">添加规格值</el-button>
-            
             <el-row>   
-              <el-col :span=24>
-                <el-tag size="medium" :key="tag" v-for="(tag,index) in sku" :closable="true" :close-transition="true" @close="handleClose(tag)">
-                {{tag}} <el-upload  class="avatar-uploader" action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader"
-                    :on-remove="handleRemove" :on-success="handleUpload"   :show-file-list="false"  :before-upload="beforeAvatarUpload">
-                    <img v-if="imgUrl[index]" :src="imgUrl[index]" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i></el-upload>
-                </el-tag>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input  v-show="spec.fi[1]" v-model="sku[0]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input  v-show="spec.fi[1]" v-model="sku[1]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-show="spec.fi[1]" v-model="sku[2]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">  
+                  <el-button type="text" v-show="spec.fi[4]" @click="addSku">添加规格值</el-button>
+                </div>    
               </el-col>
              </el-row>    
+          </el-form-item>
+          <!-- 2 -->
+          <el-form-item v-show="spec.se[0]">
+            <el-select  v-model="specification[1]" placeholder="请选择规格">
+              <el-option v-for="item in specifications" :key="item.value" :label="item.label" :value="item.label"></el-option>
+            </el-select>
+            <el-row>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-show="spec.se[1]" v-model="sku1[0]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-show="spec.se[2]" v-model="sku1[1]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-show="spec.se[3]" v-model="sku1[2]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-button type="text" v-show="spec.se[4]" @click="addSku1">添加规格值</el-button>
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <!-- 3-->
+          <el-form-item label="规格名" v-show="spec.th[0]">
+            <el-select v-model="specification[2]" placeholder="请选择规格">
+              <el-option v-for="item in specifications" :key="item.value" :label="item.label" :value="item.label"></el-option>
+            </el-select>
+            <el-row>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-model="sku2[0]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-model="sku2[1]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-input v-model="sku2[2]" placeholder="请填写规格值"></el-input>
+                </div>
+              </el-col>
+              <el-col :span=6>
+                <div class="grid-content">
+                  <el-button type="text" @click="addSku">添加规格值</el-button>
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <!-- 添加规格 -->
+          <el-form-item v-show="chooseD">
+            <el-button style="margin-left:0" plain class="add-item" :disabled="disabled[3]" @click.native="additem()">添加规格项目</el-button>
+            <el-button plain class="add-item" v-show="disabled[2]" @click.native="addTable()">完成添加</el-button>
           </el-form-item>
           <!-- 规格明细 -->
           <el-form-item label="规格明细" v-show="chooseD">
             <el-table :data="tableData" border style="width: 100%">
               <el-table-column v-if="tabcol[0]" prop="sku1" :label="tabcol[0]"></el-table-column>
-              <el-table-column prop="price" label="单买价">
+              <el-table-column v-if="tabcol[1]" prop="sku2" :label="tabcol[1]"></el-table-column>
+              <el-table-column prop="price" label="价格">
                 <template  scope="scope"> <el-input v-model="scope.row.price" placeholder="请输入价格"></el-input> </template>
               </el-table-column>
               <el-table-column prop="num" label="库存">
@@ -77,8 +146,17 @@
               <el-table-column v-show="false" prop="t_price" label="团购价">
                 <template  scope="scope"> <el-input v-show="is_pintuan" v-model="scope.row.tuan_price" placeholder="请输入团购价"></el-input> </template>
               </el-table-column>
+              <el-table-column prop="pic" label="图片">
+                <template  scope="scope"> 
+                  <el-input v-show="false" v-model="scope.row.pic" placeholder="请输入图片地址"></el-input> 
+                  <el-upload class="upload-demo" action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader"
+                    :on-success="handleUpload" :show-file-list="false"	>
+                    <el-button size="small" type="primary">上传图片</el-button>
+                  </el-upload>
+                </template>
+              </el-table-column>
             </el-table>
-            <el-row :gutter="24" style="margin-top: 20px;display:none">
+            <el-row :gutter="24" style="margin-top: 20px">
               <label for="">批量设置</label>
               <el-button type="text" v-show="!eprice" @click="setnum('price')">价格</el-button>
               <el-input class="btn-nomal" v-model="e_price" v-show="eprice"></el-input>
@@ -154,7 +232,6 @@
         },
         choose:true,
         chooseD:false,
-        imgUrl:[],
         selectedOptions:[],
         specification:[],
         specifications:[],
@@ -172,8 +249,6 @@
         eprice:false,
         enumb:false,
         sku:[],
-        inputVisible: false,
-        inputValue: '',
         sku1:[],
         sku2:[],
         sku_list:[],
@@ -188,7 +263,7 @@
         infoForm: {
           id: 0,
           name: "",
-          num : 2,
+          num : 1,
           list_pic_url: [],
           simple_desc: '',
           pic_url: [],
@@ -235,20 +310,16 @@
         }
       },
       handleChange() {
-        this.tabcol = [];
-        this.tabcol.push(this.specification[0]);
+        console.log(this.selectedOptions);
       },
       handleUpload(res,file){
-        let index = this.sku.length-1;
          if (res.errno === 0) {
             this.picture.push(res.data.path);
-            this.imgUrl[index] = res.data.path;
             this.$message({
                   type: 'success',
                   message: '上传成功'
             });
         }
-        this.getspecification();
       },
       add(eve){
         console.log(eve);
@@ -266,14 +337,25 @@
               let key = this.specifications[j].value;
               let temp = {}
               temp[key] = this.sku;
-              this.sku_list=[];
               this.sku_list.push(temp);
             }
           }
-        }     
+          this.tabcol.push(this.specification[0]);
+        }
+        if(this.specification[1] != ''){
+          for(let i in this.specifications){
+            if(this.specifications[i].label == this.specification[1]){
+              let key = this.specifications[i].value;
+              let temp = {}
+              temp[key]=this.sku1;
+              this.sku_list.push(temp);
+            }
+          }
+          this.tabcol.push(this.specification[1]);
+        }
+        console.log(this.tabcol);
         this.disabled[2]=false;
         let temp ={};
-        this.tableData = [];
         //单规格or多规格
         if(this.sku1.length === 0){
           for(let i in this.sku){
@@ -355,6 +437,8 @@
           this.spec.se[0]=true;
           this.spec.se[1]=true;
           this.spec.se[4]=true;
+          console.log('添加规格');
+          console.log(this.spec.se);
           //this.tabcol.push(this.specification[0]);
           this.getspecification();
         }
@@ -410,18 +494,7 @@
         })
       },
       handleClose(tag) {
-        this.sku.splice(this.sku.indexOf(tag), 1);
-        this.tableData = this.tableData.filter(function(e){
-            return e.sku1 != tag;
-        });
-        let index = this.sku.indexOf(tag);
-        for(let i in this.picture){
-          if(i>index){
-            this.picture[i-1]=this.picture[i];
-          }
-        }
-        this.picture.pop();
-        this.imgUrl=this.picture;
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
       showInput() {
         this.inputVisible = true;
@@ -432,15 +505,36 @@
       handleInputConfirm() {
         let inputValue = this.inputValue;
         if (inputValue) {
-          this.sku.push(inputValue);
+          this.dynamicTags.push(inputValue);
         }
         this.inputVisible = false;
         this.inputValue = '';
-        this.addTable();
       },
       //上架产品
       onSubmitInfo() {
-        this.Save();
+        // this.$refs['infoForm'].validate((valid) => {
+        //   if (valid) {
+        //     this.axios.post('good/addshelf', this.infoForm).then((response) => {
+        //       if (response.data.errno === 0) {
+        //         this.$message({
+        //           type: 'success',
+        //           message: '保存成功'
+        //         });
+        //         this.$router.go(-1)
+        //       } else {
+        //         this.$message({
+        //           type: 'error',
+        //           message: '保存失败'
+        //         })
+        //       }
+        //     })
+        //   } else {
+        //     return false;
+        //   }
+        // });
+        // if(this.pro_list.length === 0){
+            this.Save();
+        // }
         for(let i in this.pro_list){
           this.pro_list[i]['pic']=this.picture[i];
         }
@@ -464,7 +558,7 @@
         }else{
           let num=0;
           for(let i in this.tableData){
-            num += parseInt(this.tableData[i].num);
+            num += this.tableData[i].num;
           }
           data = {
             sku_list:this.sku_list,
@@ -495,7 +589,6 @@
             })
           }
         })
-        console.log(data);
       },
       handleUploadImageSuccess1(res, file) {
         if (res.errno === 0) {
@@ -660,15 +753,9 @@
     height: 105px;
     display: block;
   }
-  .el-tag{
-    margin-top: 20px;
-  }
+
   .el-tag + .el-tag {
     margin-left: 10px;
-  }
-  .el-tag .el-icon-close{
-    top: -210px;
-    right: -160px;
   }
   .button-new-tag {
     margin-left: 10px;
@@ -690,28 +777,5 @@
   }
   .btn-nomal{
     width: 20%;
-  }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
   }
 </style>

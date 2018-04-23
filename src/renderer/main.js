@@ -20,8 +20,8 @@ router.beforeEach((to, from, next) => {
 	let token = localStorage.getItem('token') || '';
 
     //配置接口信息
-	//Axios.defaults.baseURL = 'https://dh.sty.sztcmdiet.com/admin/';
-	Axios.defaults.baseURL = 'http://127.0.0.1:5000/admin/';
+	Axios.defaults.baseURL = 'https://dh.sty.sztcmdiet.com/admin/';
+	//Axios.defaults.baseURL = 'http://127.0.0.1:5000/admin/';
     Axios.defaults.headers.common['red13-token'] = token;
 
 	if (!token && to.name !== 'login') {

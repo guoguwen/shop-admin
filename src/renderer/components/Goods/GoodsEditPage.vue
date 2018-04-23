@@ -28,7 +28,10 @@
             </el-switch>
           </el-form-item>
           <el-form-item v-show="is_pintuan" label="团购数量">
-            <el-input-number  v-model="infoForm.num"  :min="0" :max="100000" label="团购数量"></el-input-number>
+            <el-input-number  v-model="infoForm.group_buy_num"  :min="0" :max="100000" label="团购数量"></el-input-number>
+          </el-form-item>
+          <el-form-item v-show="is_pintuan && !having" label="拼团价">
+            <el-input-number  v-model="infoForm.tuan_price"  :min="0" :max="100000" label="拼团价"></el-input-number>
           </el-form-item>
           <!-- 添加规格值 1-->
           <!-- <el-form-item label="规格名">
@@ -118,7 +121,7 @@
           <!-- <el-button plain class="add-item" :disabled="disabled[3]" @click="additem()">添加规格项目</el-button>
           <el-button plain class="add-item" v-show="disabled[2]" @click="addTable()">完成添加</el-button> -->
           <!-- 规格明细 -->
-          <el-form-item label="规格明细">
+          <el-form-item label="规格明细" v-show="having">
             <el-table :data="tableData" border style="width: 100%">
               <el-table-column prop="sku1" :label="tabcol[0]"></el-table-column>
               <el-table-column prop="sku2" :label="tabcol[1]"></el-table-column>
@@ -207,6 +210,7 @@
         specifications:[],
         options:[],
         bands:[],
+        having:true,
         tabcol:[],
         dynamicTags: ['新品', '膳食', '大健康'],
         inputVisible: false,
@@ -237,6 +241,8 @@
           list_pic_url: [],
           simple_desc: '',
           pic_url: [],
+          group_buy_num:0,
+          tuan_price:0,
           sort_order: 100,
           is_show: true,
           floor_price: 0,
@@ -482,7 +488,8 @@
             goods_brief:this.infoForm.simple_desc,
             goods_desc:this.content,
             retail_price:this.infoForm.price,
-            group_buy_num:this.infoForm.num,
+            pintuan_num:this.infoForm.group_buy_num,
+            tuan_price:this.infoForm.tuan_price,
             list_pic_url:this.infoForm.list_pic_url,
             pic_list:this.infoForm.pic_url,
         }
@@ -567,14 +574,18 @@
           this.sku_list = resInfo.sku_list;
           this.initSKU();
           this.pro_list = resInfo.pro_list;
-          this.tableData = resInfo.pro_list.length == 0? [] : resInfo.pro_list;
+          this.tableData = resInfo.pro_list;
+          if(resInfo.pro_list.length <=1){
+            this.having = false;
+          }
           this.infoForm.name = resInfo.name;
           this.is_pintuan= resInfo.is_pintuan ==1 ? true : false;
           this.goods_number=10000;
           this.infoForm.simple_desc=resInfo.goods_brief;
           this.content=resInfo.goods_desc;
           this.infoForm.price=resInfo.retail_price;
-          this.infoForm.num=resInfo.pintuan_num;
+          this.infoForm.tuan_price=resInfo.pro_list[0].tuan_price;
+          this.infoForm.group_buy_num=resInfo.pintuan_num;
           let list_pic_url=[];
           for(let i in resInfo.pic_list){
             list_pic_url.push(resInfo.pic_list[i].img_url);

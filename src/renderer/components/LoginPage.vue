@@ -64,8 +64,8 @@
                         console.log(res.data)
                         this.loading = false;
                         if (res.data.errno === 0) {
-                            sessionStorage.setItem('token', res.data.data.token);
-                            sessionStorage.setItem('userInfo', JSON.stringify(res.data.data.userInfo));
+                            localStorage.setItem('token', res.data.data.token);
+                            localStorage.setItem('userInfo', JSON.stringify(res.data.data.userInfo));
                             this.$router.push({name: 'dashboard'});
 
                         } else {

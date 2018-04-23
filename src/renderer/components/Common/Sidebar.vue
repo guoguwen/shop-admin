@@ -6,65 +6,12 @@
         </div>
         <el-menu class="sidebar" :unique-opened="true" :default-active="currentPagePath" @open="handleOpen"
                  :router="true" theme="dark" @close="handleClose">
+            <!-- 首页 -->
             <el-menu-item index="/dashboard">
                 <i class="fa fa-tachometer"></i>
                 <span>主页</span>
             </el-menu-item>
-            <el-submenu index="goods">
-                <template slot="title">
-                    <i class="fa fa-product-hunt"></i>
-                    <span>商品管理</span>
-                </template>
-                <el-menu-item index="/dashboard/goods">
-                    <i class="fa fa-circle"></i>
-                    <span>商品列表</span>
-                </el-menu-item>
-                <el-menu-item index="/dashboard/category">
-                    <i class="fa fa-circle"></i>
-                    <span>商品分类</span>
-                </el-menu-item>
-                <el-menu-item index="/dashboard/brand">
-                    <i class="fa fa-circle"></i>
-                    <span>品牌管理</span>
-                </el-menu-item>
-            </el-submenu>
-            <el-submenu index="order">
-                <template slot="title">
-                    <i class="fa fa-large fa-truck"></i>订单中心
-                </template>
-                <el-menu-item index="/dashboard/order">
-                    <i class="fa fa-circle"></i>
-                    <span>订单列表</span>
-                </el-menu-item>
-            </el-submenu>
-            <el-submenu index="operate">
-                <template slot="title">
-                    <i class="fa fa-large fa-rmb "></i>
-                    <span>店铺运营</span>
-                </template>
-                <el-menu-item index="/dashboard/operate/topic">
-                    <i class="fa fa-circle"></i>
-                    <span>专题管理</span>
-                </el-menu-item>
-                <el-menu-item index="/dashboard/operate/qrcode">
-                    <i class="fa fa-circle"></i>
-                    <span>二维码</span>
-                </el-menu-item>
-                <el-menu-item index="/dashboard/operate/coupon">
-                    <i class="fa fa-circle"></i>
-                    <span>优惠券</span>
-                </el-menu-item>
-            </el-submenu>
-            <!--<el-submenu index="total">-->
-                <!--<template slot="title">-->
-                    <!--<i class="fa fa-large fa-line-chart"></i>-->
-                    <!--<span>数据统计</span>-->
-                <!--</template>-->
-                <!--<el-menu-item index="/dashboard/total">-->
-                    <!--<i class="fa fa-circle"></i>-->
-                    <!--<span>订单列表</span>-->
-                <!--</el-menu-item>-->
-            <!--</el-submenu>-->
+            <!-- 用户 -->
             <el-submenu index="user">
                 <template slot="title">
                     <i class="fa fa-large fa-users"></i>
@@ -83,10 +30,78 @@
                     <span>经销商列表</span>
                 </el-menu-item>
             </el-submenu>
+            <!-- 订单 -->
+            <el-submenu index="order">
+                <template slot="title">
+                    <i class="fa fa-large fa-truck"></i>订单中心
+                </template>
+                <el-menu-item index="/dashboard/order">
+                    <i class="fa fa-circle"></i>
+                    <span>订单列表</span>
+                </el-menu-item>
+                <el-menu-item index="/dashboard/order">
+                    <i class="fa fa-circle"></i>
+                    <span>售后订单</span>
+                </el-menu-item>
+            </el-submenu>
+            <!-- 商品 -->
+            <el-submenu index="goods">
+                <template slot="title">
+                    <i class="fa fa-product-hunt"></i>
+                    <span>商品管理</span>
+                </template>
+                <el-menu-item index="/dashboard/goods">
+                    <i class="fa fa-circle"></i>
+                    <span>商品列表</span>
+                </el-menu-item>
+                <el-menu-item index="/dashboard/category">
+                    <i class="fa fa-circle"></i>
+                    <span>商品分类</span>
+                </el-menu-item>
+                <el-menu-item index="/dashboard/brand">
+                    <i class="fa fa-circle"></i>
+                    <span>品牌管理</span>
+                </el-menu-item>
+            </el-submenu>
+            <!-- 统计 -->
             <el-menu-item index="/count">
                 <i class="fa fa-large fa-sticky-note"></i>
                 <span>统计</span>
             </el-menu-item>
+            <!-- 营销 -->
+            <el-submenu index="operate">
+                <template slot="title">
+                    <i class="fa fa-large fa-rmb "></i>
+                    <span>店铺运营</span>
+                </template>
+                <el-menu-item style="display:none" index="/dashboard/operate/topic">
+                    <i class="fa fa-circle"></i>
+                    <span>专题管理</span>
+                </el-menu-item>
+                <el-menu-item index="/dashboard/operate/qrcode">
+                    <i class="fa fa-circle"></i>
+                    <span>二维码</span>
+                </el-menu-item>
+                <el-menu-item index="/dashboard/operate/coupon">
+                    <i class="fa fa-circle"></i>
+                    <span>优惠券</span>
+                </el-menu-item>
+                <el-menu-item index="/dashboard/operate/coupon">
+                    <i class="fa fa-circle"></i>
+                    <span>用户福利</span>
+                </el-menu-item>
+            </el-submenu>
+            <!--<el-submenu index="total">-->
+                <!--<template slot="title">-->
+                    <!--<i class="fa fa-large fa-line-chart"></i>-->
+                    <!--<span>数据统计</span>-->
+                <!--</template>-->
+                <!--<el-menu-item index="/dashboard/total">-->
+                    <!--<i class="fa fa-circle"></i>-->
+                    <!--<span>订单列表</span>-->
+                <!--</el-menu-item>-->
+            <!--</el-submenu>-->
+            
             <!--<el-submenu index="setting">-->
                 <!--<template slot="title">-->
                     <!--<i class="fa fa-large fa-wrench"></i>-->
