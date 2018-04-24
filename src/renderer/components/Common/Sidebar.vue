@@ -62,6 +62,10 @@
                     <i class="fa fa-circle"></i>
                     <span>品牌管理</span>
                 </el-menu-item>
+                <el-menu-item index="/dashboard/goods/sku">
+                    <i class="fa fa-circle"></i>
+                    <span>规格管理</span>
+                </el-menu-item>
             </el-submenu>
             <!-- 统计 -->
             <el-menu-item index="/count">
