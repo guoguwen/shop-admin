@@ -94,6 +94,10 @@
                     <i class="fa fa-circle"></i>
                     <span>用户福利</span>
                 </el-menu-item>
+                <el-menu-item index="/dashboard/operate/scroll">
+                    <i class="fa fa-circle"></i>
+                    <span>首页轮播</span>
+                </el-menu-item>
             </el-submenu>
             <!--<el-submenu index="total">-->
                 <!--<template slot="title">-->

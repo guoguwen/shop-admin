@@ -96,6 +96,16 @@ export default new Router({
                     name: 'qrcode',
                     component: require('@/components/Topic/QRcodePage')
                 },
+                {
+                    path: 'operate/scroll',
+                    name: 'scroll',
+                    component: require('@/components/Topic/ScrollPage')
+                },
+                {
+                    path: 'operate/scroll/add',
+                    name: 'scroll_add',
+                    component: require('@/components/Topic/ScrollAddPage')
+                },
               {
                 path: 'operate/topic/add',
                 name: 'topic_add',
