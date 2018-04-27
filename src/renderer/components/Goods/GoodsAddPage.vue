@@ -457,7 +457,7 @@
             retail_price:this.sigleData[0].s_price,
             uunit_price:this.infoForm.price,
             tuan_price:this.sigleData[0].tuan_price,
-            group_buy_num:this.infoForm.num,
+            pintuan_num:this.infoForm.num,
             list_pic_url:this.infoForm.list_pic_url,
             pic_list:this.infoForm.pic_url,
           }
@@ -476,7 +476,7 @@
             goods_desc:this.content,
             retail_price:this.infoForm.price,
             unit_price:this.infoForm.price,
-            group_buy_num:this.infoForm.num,
+            pintuan_num:this.infoForm.num,
             list_pic_url:this.infoForm.list_pic_url,
             pic_list:this.infoForm.pic_url,
           }

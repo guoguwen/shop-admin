@@ -161,7 +161,7 @@
             </el-row>
           </el-form-item>
           <el-form-item label="轮播图片" prop="pic_url">
-            <el-upload action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
+            <el-upload id="upload" action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" :file-list="infoForm.pic_url" list-type="picture" :on-preview="handlePreview"
                     :on-remove="handleRemove" :on-success="handleUploadImageSuccess1"><i class="el-icon-plus"></i></el-upload>
                   <el-dialog :visible.sync="dialogVisible">
                     <img width="100%"  :src="dialogImageUrl" alt="">
@@ -588,10 +588,12 @@
           this.infoForm.group_buy_num=resInfo.pintuan_num;
           let list_pic_url=[];
           for(let i in resInfo.pic_list){
-            list_pic_url.push(resInfo.pic_list[i].img_url);
+            let temp={};
+            list_pic_url.push({name:'',url:resInfo.pic_list[i].img_url});
           }
           this.infoForm.list_pic_url=resInfo.primary_pic_url;
           this.infoForm.pic_url=list_pic_url;
+          console.log(this.infoForm);
         })
       },
       getspecification(){
@@ -611,7 +613,7 @@
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
-      handlePictureCardPreview(file) {
+      handlePreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
@@ -671,6 +673,10 @@
 </script>
 
 <style>
+  .el-upload-list--picture .el-upload-list__item{
+    width: 92px;
+    display: inline-block;
+  }
   .image-uploader{
     height: 105px;
   }
