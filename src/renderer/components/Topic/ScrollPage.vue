@@ -74,16 +74,23 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
+                let self = this;
                 this.axios.post('banner/delBanner',{id : id}).then(res => {
-                    if(res.data.errno === 0){
-                        this.$message({
-							type: 'success',
-							message: '删除成功!'
-						});
-                    }
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.init();
                 })
             })
         }
+    },
+    init(){
+        this.axios.get('banner/BannerList').then(res => {
+            if(res.data.errno === 0 ){
+                this.data = res.data.data.list;
+            }
+        })
     },
     myfetch(option) {
         let url = option.url;
@@ -101,16 +108,17 @@ export default {
     }
   },
   mounted() {
-    let _this = this;
-    (async () => {
-      let option = {
-        url: "https://dh.sty.sztcmdiet.com/admin/banner/BannerList",
-        method: "get",
-        headers: { "red13-token": localStorage.getItem("token") }
-      };
-      let res = await _this.myfetch(option);
-      this.data = res.data.list;
-    })();
+    // let _this = this;
+    // (async () => {
+    //   let option = {
+    //     url: "https://dh.sty.sztcmdiet.com/admin/banner/BannerList",
+    //     method: "get",
+    //     headers: { "red13-token": localStorage.getItem("token") }
+    //   };
+    //   let res = await _this.myfetch(option);
+    //   this.data = res.data.list;
+    // })();
+    this.init();
   }
 };
 </script>

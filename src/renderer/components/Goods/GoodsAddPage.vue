@@ -111,7 +111,7 @@
           </el-form-item>
           <el-form-item label="轮播图片" prop="pic_url">
             <el-upload action="https://dh.sty.sztcmdiet.com/admin/upload/upimg" name="img" :headers="uploaderHeader" list-type="picture-card" :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove" :on-success="handleUploadImageSuccess1"  :before-upload="beforeAvatarUpload"><i class="el-icon-plus"></i></el-upload>
+                    :on-remove="handleRemoveS" :on-success="handleUploadImageSuccess1"  :before-upload="beforeAvatarUpload"><i class="el-icon-plus"></i></el-upload>
                   <el-dialog :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt="">
                   </el-dialog>
@@ -131,7 +131,6 @@
               @ready="onEditorReady($event)"></quill-editor>
               <el-upload style="display:none" name="img" :headers="uploaderHeader"  :action="apiurl" :show-file-list="false" :before-upload='newEditorbeforeupload'  :on-success='newEditorSuccess'
                            ref="uniqueId" id="uniqueId"></el-upload >
-
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmitInfo">发布商品</el-button>
@@ -541,8 +540,12 @@
             }
         })
       },
-      handleRemove(file, fileList) {
+      handleRemoveS(file, fileList) {
         console.log(file, fileList);
+      },
+      handleRemove(file, fileList) {
+        //console.log(file, fileList);
+        this.infoForm.list_pic_url.pop();
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;

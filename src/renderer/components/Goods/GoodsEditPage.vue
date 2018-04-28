@@ -478,6 +478,10 @@
         for(let i in this.pro_list){
           this.pro_list[i]['pic']=this.picture[i];
         }
+        let pic_list=[];
+        for(let i in this.infoForm.pic_url){
+          pic_list.push(this.infoForm.pic_url[i].url);
+        }
         let data = {
             id:this.infoForm.id,
             sku_list:this.skuList,
@@ -491,7 +495,7 @@
             pintuan_num:this.infoForm.group_buy_num,
             tuan_price:this.infoForm.tuan_price,
             list_pic_url:this.infoForm.list_pic_url,
-            pic_list:this.infoForm.pic_url,
+            pic_list:pic_list,
         }
         if(data.pic_list.length === 0){
           this.$message({
@@ -611,7 +615,10 @@
         })
       },
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        let index = file.uid;
+        this.infoForm.pic_url = this.infoForm.pic_url.filter(function(e){
+          return e.uid != index;
+        })
       },
       handlePreview(file) {
         this.dialogImageUrl = file.url;
